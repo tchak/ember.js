@@ -1,3 +1,5 @@
+var get = Ember.get;
+
 /**
 @module ember
 @submodule ember-runtime
@@ -96,12 +98,15 @@ Ember.Evented = Ember.Mixin.create({
     @param {Object...} args Optional arguments to pass on
   */
   trigger: function(name) {
-    var args = [], i, l;
-    for (i = 1, l = arguments.length; i < l; i++) {
-      args.push(arguments[i]);
-    }
+    var args = [].slice.call(arguments, 1);
     Ember.sendEvent(this, name, args);
+
+    if (get(this, 'triggerMethod')) {
+      return Ember.tryInvoke(this, name, args);
+    }
   },
+
+  triggerMethod: false,
 
   fire: function(name) {
     Ember.deprecate("Ember.Evented#fire() has been deprecated in favor of trigger() for compatibility with jQuery. It will be removed in 1.0. Please update your code to call trigger() instead.");

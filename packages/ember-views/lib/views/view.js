@@ -162,20 +162,10 @@ Ember.CoreView = Ember.Object.extend(Ember.Evented, {
     Override the default event firing from `Ember.Evented` to
     also call methods with the given name.
 
-    @method trigger
-    @param name {String}
+    @property triggerMethod
+    @type Boolean
   */
-  trigger: function(name) {
-    this._super.apply(this, arguments);
-    var method = this[name];
-    if (method) {
-      var args = [], i, l;
-      for (i = 1, l = arguments.length; i < l; i++) {
-        args.push(arguments[i]);
-      }
-      return method.apply(this, args);
-    }
-  },
+  triggerMethod: true,
 
   has: function(name) {
     return Ember.typeOf(this[name]) === 'function' || this._super(name);
